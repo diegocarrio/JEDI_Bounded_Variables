@@ -1,0 +1,8 @@
+files:
+  - testinput/enshofx_1.yaml
+  - testinput/enshofx_2.yaml
+  - testinput/enshofx_3.yaml
+  - testinput/enshofx_4.yaml
+
+test:
+  reference filename: testoutput/enshofx.test

@@ -1,0 +1,108 @@
+cost function:
+  cost type: 3D-Var
+  time window:
+    begin: 2010-01-01T09:00:00Z
+    length: PT6H
+  jb evaluation: false
+  analysis variables: [x]
+  background:
+    date: 2010-01-01T12:00:00Z
+    filename: Data/forecast.fc.2009-12-31T00:00:00Z.P1DT12H.nc
+  background error:
+    covariance model: hybrid
+    components:
+    - covariance:
+        covariance model: QgError
+        horizontal_length_scale: 2.2e6
+        maximum_condition_number: 1.0e6
+        standard_deviation: 1.8e7
+        vertical_length_scale: 15000.0
+      weight:
+        value: 0.5
+    - covariance:
+        covariance model: ensemble
+        localization:
+          horizontal_length_scale: 4.0e6
+          localization method: QG
+          maximum_condition_number: 1.0e6
+          standard_deviation: 1.0
+          vertical_length_scale: 30000.0
+        members from template:
+          template:
+            date: 2010-01-01T12:00:00Z
+            filename: Data/forecast.ens.%mem%.2009-12-31T00:00:00Z.P1DT12H.nc
+          pattern: %mem%
+          nmembers: 5
+      weight:
+        value: 0.5
+  observations:
+    observers:
+    - obs operator:
+        obs type: Stream
+      obs space:
+        obsdatain:
+          obsfile: Data/truth.obs3d.nc
+        obsdataout:
+          obsfile: Data/3dvar_hybrid.obs3d.nojb_eval.nc
+        obs type: Stream
+      obs error:
+        covariance model: diagonal
+    - obs operator:
+        obs type: Wind
+      obs space:
+        obsdatain:
+          obsfile: Data/truth.obs3d.nc
+        obsdataout:
+          obsfile: Data/3dvar_hybrid.obs3d.nojb_eval.nc
+        obs type: Wind
+      obs error:
+        covariance model: diagonal
+    - obs operator:
+        obs type: WSpeed
+      obs space:
+        obsdatain:
+          obsfile: Data/truth.obs3d.nc
+        obsdataout:
+          obsfile: Data/3dvar_hybrid.obs3d.nojb_eval.nc
+        obs type: WSpeed
+      obs error:
+        covariance model: diagonal
+  geometry:
+    nx: 40
+    ny: 20
+    depths: [4500.0, 5500.0]
+variational:
+  minimizer:
+    algorithm: DRPCG
+  iterations:
+  - ninner: 10
+    gradient norm reduction: 1.0e-10
+    geometry:
+      nx: 40
+      ny: 20
+      depths: [4500.0, 5500.0]
+  - ninner: 10
+    gradient norm reduction: 1.0e-10
+    geometry:
+      nx: 40
+      ny: 20
+      depths: [4500.0, 5500.0]
+
+final:
+  increment:
+    geometry:
+      nx: 40
+      ny: 20
+      depths: [4500.0, 5500.0]
+    output:
+      state component:
+        datadir: Data
+        date: 2010-01-01T12:00:00Z
+        exp: 3dvar_nojb_eval
+        type: in
+        analysis variables: [x]
+
+final j evaluation: false
+
+test:
+  reference filename: testoutput/3dvar_hybrid_wo_jb_lastj_evaluation.test

@@ -1,0 +1,29 @@
+geometry:
+  resol: 40
+model:
+  f: 8.0
+  name: L95
+  tstep: PT1H30M
+initial condition:
+  date: 2012-06-19T00:00:00Z
+  filename: Data/truth.fc.2010-01-01T00:00:00Z.P900D.l95
+forecast length: PT4800H
+
+time window:
+  begin: 2012-06-19T00:00:00Z
+  length: PT4800H
+observations:
+  obs perturbations: true
+  observers:
+  - obs operator: {}
+    obs space:
+      generate:
+        obs_density: 40
+        obs_error: 2.4
+        obs_frequency: PT24H
+      obsdataout:
+        obsfile: Data/truth3d.2012-09-27T00:00:00Z.obt
+make obs: true
+
+#test:
+# reference filename: testoutput/makeobs3d.test

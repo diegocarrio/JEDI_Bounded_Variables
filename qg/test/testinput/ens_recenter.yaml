@@ -1,0 +1,27 @@
+center:
+  date: 2010-01-01T00:00:00Z
+  filename: Data/forecast.ens.1.2009-12-31T00:00:00Z.P1D.nc
+
+ensemble:
+  members from template:
+    template:
+      date: 2010-01-01T00:00:00Z
+      filename: Data/forecast.ens.%mem%.2009-12-31T00:00:00Z.P1D.nc
+    pattern: %mem%
+    nmembers: 5
+
+recenter variables: [x]
+
+geometry:
+  nx: 40
+  ny: 20
+  depths: [4500.0, 5500.0]
+
+recentered output:
+  datadir: Data
+  exp: recenter
+  type: ens
+  date: 2010-01-01T00:00:00Z
+
+test:
+  reference filename: testoutput/ens_recenter.test

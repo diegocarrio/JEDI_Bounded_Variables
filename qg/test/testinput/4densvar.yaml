@@ -1,0 +1,119 @@
+cost function:
+  cost type: 4D-Ens-Var
+  time window:
+    begin: 2010-01-01T00:00:00Z
+    length: PT6H
+  subwindow: PT1H
+  parallel subwindows: true
+  analysis variables: [x]
+  background:
+    states:
+    - date: 2010-01-01T00:00:00Z
+      filename: Data/forecast.fc.2009-12-31T00:00:00Z.P1D.nc
+    - date: 2010-01-01T01:00:00Z
+      filename: Data/forecast.fc.2009-12-31T00:00:00Z.P1DT1H.nc
+    - date: 2010-01-01T02:00:00Z
+      filename: Data/forecast.fc.2009-12-31T00:00:00Z.P1DT2H.nc
+    - date: 2010-01-01T03:00:00Z
+      filename: Data/forecast.fc.2009-12-31T00:00:00Z.P1DT3H.nc
+    - date: 2010-01-01T04:00:00Z
+      filename: Data/forecast.fc.2009-12-31T00:00:00Z.P1DT4H.nc
+    - date: 2010-01-01T05:00:00Z
+      filename: Data/forecast.fc.2009-12-31T00:00:00Z.P1DT5H.nc
+    - date: 2010-01-01T06:00:00Z
+      filename: Data/forecast.fc.2009-12-31T00:00:00Z.P1DT6H.nc
+  background error:
+    covariance model: ensemble
+    localization:
+      horizontal_length_scale: 2.0e6
+      localization method: QG
+      maximum_condition_number: 1.0e6
+      standard_deviation: 1.0
+      vertical_length_scale: 3694.0
+    members from template:
+      template:
+        states:
+        - date: 2010-01-01T00:00:00Z
+          filename: Data/forecast.ens.%mem%.2009-12-31T00:00:00Z.P1D.nc
+        - date: 2010-01-01T01:00:00Z
+          filename: Data/forecast.ens.%mem%.2009-12-31T00:00:00Z.P1DT1H.nc
+        - date: 2010-01-01T02:00:00Z
+          filename: Data/forecast.ens.%mem%.2009-12-31T00:00:00Z.P1DT2H.nc
+        - date: 2010-01-01T03:00:00Z
+          filename: Data/forecast.ens.%mem%.2009-12-31T00:00:00Z.P1DT3H.nc
+        - date: 2010-01-01T04:00:00Z
+          filename: Data/forecast.ens.%mem%.2009-12-31T00:00:00Z.P1DT4H.nc
+        - date: 2010-01-01T05:00:00Z
+          filename: Data/forecast.ens.%mem%.2009-12-31T00:00:00Z.P1DT5H.nc
+        - date: 2010-01-01T06:00:00Z
+          filename: Data/forecast.ens.%mem%.2009-12-31T00:00:00Z.P1DT6H.nc
+      pattern: %mem%
+      nmembers: 10
+  observations:
+    observers:
+    - obs error:
+        covariance model: diagonal
+      obs operator:
+        obs type: Stream
+      obs space:
+        obsdatain:
+          obsfile: Data/truth.obs4d_12h.nc
+        obsdataout:
+          obsfile: Data/4densvar.obs.nc
+        obs type: Stream
+    - obs error:
+        covariance model: diagonal
+      obs operator:
+        obs type: Wind
+      obs space:
+        obsdatain:
+          obsfile: Data/truth.obs4d_12h.nc
+        obsdataout:
+          obsfile: Data/4densvar.obs.nc
+        obs type: Wind
+    - obs error:
+        covariance model: diagonal
+      obs operator:
+        obs type: WSpeed
+      obs space:
+        obsdatain:
+          obsfile: Data/truth.obs4d_12h.nc
+        obsdataout:
+          obsfile: Data/4densvar.obs.nc
+        obs type: WSpeed
+#    constraints:
+#    - jcdfi:
+#        alpha: 1.0e-13
+#        cutoff: PT3H
+#        type: DolphChebyshev
+#        filtered variables: [x]
+  geometry:
+    nx: 40
+    ny: 20
+    depths: [4500.0, 5500.0]
+variational:
+  minimizer:
+    algorithm: DRPLanczos
+  iterations:
+  - ninner: 10
+    gradient norm reduction: 1.0e-10
+    geometry:
+      nx: 40
+      ny: 20
+      depths: [4500.0, 5500.0]
+  - ninner: 10
+    gradient norm reduction: 1.0e-10
+    geometry:
+      nx: 40
+      ny: 20
+      depths: [4500.0, 5500.0]
+final:
+  prints:
+    frequency: PT1H
+output:
+  datadir: Data
+  exp: 4densvar
+  type: an
+
+test:
+  reference filename: testoutput/4densvar.test

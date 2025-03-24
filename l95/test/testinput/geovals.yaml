@@ -1,0 +1,12 @@
+geometry:
+  resol: 40
+
+time window:
+  begin: 2010-01-01T03:00:00Z
+  end: 2010-01-02T03:00:00Z
+observations:
+- geovals:
+    filename: Data/gom.l95
+  geovals test:
+    state variables: [x]
+    norm: 101.4587929124312

@@ -1,0 +1,31 @@
+forecast length: P3D
+initial condition:
+  date: 2010-01-01T00:00:00Z
+  filename: Data/forecast.an.2010-01-01T00:00:00Z.l95
+model:
+  name: PseudoModel
+  states:
+  - date: 2010-01-01T12:00:00Z
+    filename: Data/forecast.fc.2010-01-01T00:00:00Z.PT12H.l95
+  - date: 2010-01-02T00:00:00Z
+    filename: Data/forecast.fc.2010-01-01T00:00:00Z.P1D.l95
+  - date: 2010-01-02T12:00:00Z
+    filename: Data/forecast.fc.2010-01-01T00:00:00Z.P1DT12H.l95
+  - date: 2010-01-03T00:00:00Z
+    filename: Data/forecast.fc.2010-01-01T00:00:00Z.P2D.l95
+  - date: 2010-01-03T12:00:00Z
+    filename: Data/forecast.fc.2010-01-01T00:00:00Z.P2DT12H.l95
+  - date: 2010-01-04T00:00:00Z
+    filename: Data/forecast.fc.2010-01-01T00:00:00Z.P3D.l95
+  tstep: PT12H
+output:
+  datadir: Data
+  date: 2010-01-01T00:00:00Z
+  exp: forecast_pseudomodel
+  frequency: PT112H
+  type: pseudofc
+geometry:
+  resol: 40
+
+test:
+  reference filename: testoutput/forecast_pseudomodel.test

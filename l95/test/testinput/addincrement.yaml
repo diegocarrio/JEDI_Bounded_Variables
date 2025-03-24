@@ -1,0 +1,19 @@
+state geometry:
+  resol: 40
+increment geometry:
+  resol: 40
+state:
+  date: 2010-01-02T00:00:00Z
+  filename: Data/eda_4dvar.mem003.an.2010-01-02T00:00:00Z.l95
+increment:
+  date: 2010-01-02T00:00:00Z
+  filename: Data/diffstates.in.2010-01-02T00:00:00Z.PT0S.l95
+  added variables: [x]
+output:
+  datadir: Data
+  date: 2010-01-02T00:00:00Z
+  exp: addincrement
+  type: an
+
+test:
+  reference filename: testoutput/addincrement.test

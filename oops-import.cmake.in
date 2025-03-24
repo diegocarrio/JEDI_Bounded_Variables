@@ -1,0 +1,77 @@
+# oops-import.cmake
+
+include(CMakeFindDependencyMacro)
+
+#Export enabled toymodels component availability (boolean)
+set(oops_qg_FOUND @ENABLE_QG_MODEL@) #COMPONENT qg
+set(oops_lorenz95_FOUND @ENABLE_LORENZ95_MODEL@) #COMPONENT lorenz95
+
+if(@jedicmake_FOUND@ AND NOT jedicmake_FOUND)
+    find_dependency(jedicmake REQUIRED)
+endif()
+
+if((@LAPACK_FOUND@ AND NOT LAPACK_FOUND) OR (@MKL_FOUND@ AND NOT MKL_FOUND))
+    if( @MKL_FOUND@ )
+        find_dependency( MKL REQUIRED )
+        set( LAPACK_LIBRARIES ${MKL_LIBRARIES} )
+    else()
+        find_dependency( LAPACK REQUIRED )
+    endif()
+endif()
+
+if(NOT Eigen3_FOUND)
+    find_dependency( Eigen3 REQUIRED NO_MODULE HINTS @EIGEN3_ROOT_DIR@ )
+endif()
+
+if(@OPENMP@ AND NOT (OpenMP_CXX_FOUND AND OpenMP_Fortran_FOUND))
+    find_dependency( OpenMP REQUIRED COMPONENTS CXX Fortran )
+endif()
+
+if(NOT (MPI_CXX_FOUND AND MPI_Fortran_FOUND))
+    find_dependency( MPI REQUIRED COMPONENTS CXX Fortran )
+endif()
+
+if(NOT NetCDF_Fortran_FOUND)
+    find_dependency( NetCDF REQUIRED COMPONENTS Fortran )
+endif()
+
+if(NOT Boost_FOUND)
+    find_dependency( Boost REQUIRED )
+endif()
+
+if(NOT eckit_FOUND)
+    find_dependency( eckit REQUIRED COMPONENTS MPI )
+endif()
+
+if(NOT fckit_FOUND)
+    find_dependency( fckit REQUIRED )
+endif()
+
+if(NOT atlas_FOUND)
+    if(@OpenMP_FOUND@)
+        find_dependency( atlas REQUIRED COMPONENTS OMP OMP_Fortran )
+    else()
+        find_dependency( atlas REQUIRED )
+    endif()
+endif()
+
+if(@ENABLE_GPTL@ AND NOT GPTL_FOUND)
+    find_dependency( GPTL REQUIRED )
+endif()
+
+if(@nlohmann_json_FOUND@ AND NOT nlohmann_json_FOUND)
+    find_dependency(nlohmann_json QUIET)
+endif()
+if (@nlohmann_json_schema_validator_FOUND@ AND NOT nlohmann_json_schema_validator_FOUND)
+    find_dependency(nlohmann_json_schema_validator QUIET)
+endif()
+
+#Export Fortran compiler version for checking module compatibility
+set(@PROJECT_NAME@_MODULES_Fortran_COMPILER_ID @CMAKE_Fortran_COMPILER_ID@)
+set(@PROJECT_NAME@_MODULES_Fortran_COMPILER_VERSION @CMAKE_Fortran_COMPILER_VERSION@)
+if(NOT @PROJECT_NAME@_MODULES_Fortran_COMPILER_ID STREQUAL CMAKE_Fortran_COMPILER_ID
+   OR NOT @PROJECT_NAME@_MODULES_Fortran_COMPILER_VERSION VERSION_EQUAL CMAKE_Fortran_COMPILER_VERSION)
+    message(SEND_ERROR "Package @PROJECT_NAME@ provides Fortran modules built with "
+            "${@PROJECT_NAME@_MODULES_Fortran_COMPILER_ID}-${@PROJECT_NAME@_MODULES_Fortran_COMPILER_VERSION} "
+            "but this build for ${PROJECT_NAME} uses incompatible compiler ${CMAKE_Fortran_COMPILER_ID}-${CMAKE_Fortran_COMPILER_VERSION}")
+endif()
