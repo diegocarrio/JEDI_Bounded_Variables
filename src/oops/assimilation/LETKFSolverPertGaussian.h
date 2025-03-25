@@ -121,7 +121,7 @@ Observations<OBS> LETKFSolverPertGaussian<MODEL, OBS>::computeHofX(const StateEn
 	Log::info() << "----------------------------------" << std::endl;	
 	Log::info() << "DCC: COMPUTING HofX" << std::endl;
 
-        // Recover the full HofX from the original ensemble and store them in (this->Yb_):
+        // Recover the full HofX from the original ensemble and store them in (HXb_):
 	// Remember: Yb_ stands for ensemble perturbations in the observation space: Yb_ = HXb_ - Hxb
 	// Thus, HXb = Hxb + Yb_
         for (size_t iens = 0; iens < (this->nens_); ++iens) {
